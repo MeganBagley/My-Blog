@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Name</title>
+<style>
+  /* ============================================
+     EASY EDITS — change these to customize!
+     ============================================ */
+  :root {
+    --accent-color: #111;       /* main text/border color */
+    --bg-color: #fff;           /* background */
+    --muted-color: #888;        /* dates, tags, arrows */
+    --font-serif: 'Times New Roman', Times, serif;   /* headings & blog titles */
+    --font-sans: Arial, Helvetica, sans-serif;       /* nav & body */
+  }
+
+  /* ============================================
+     BASE
+     ============================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); background: var(--bg-color); color: var(--accent-color); min-height: 100vh; }
+  a { text-decoration: none; color: inherit; }
+
+  /* ============================================
+     NAV
+     — Edit: change "Your Name" in the HTML below
+     ============================================ */
+  nav {
+    border-bottom: 1px solid var(--accent-color);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    background: var(--bg-color);
+    z-index: 100;
+  }
+  .site-name {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-weight: 400;
+    transition: opacity .2s;
+  }
+  .nav-links a:hover, .nav-links a.active { opacity: 0.4; }
+
+  /* ============================================
+     PAGE SWITCHING
+     ============================================ */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ============================================
+     MARQUEE TICKER
+     — Edit: change the text inside .marquee-inner below
+     ============================================ */
+  .marquee-wrap {
+    border-top: 1px solid var(--accent-color);
+    border-bottom: 1px solid var(--accent-color);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 9px 0;
+    background: var(--bg-color);
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: marquee 22s linear infinite;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--accent-color);
+    font-family: var(--font-sans);
+  }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* ============================================
+     HERO IMAGE
+     — Edit: replace the src in .hero-img-wrap img below
+     ============================================ */
+  .hero-img-wrap {
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background: #f5f5f3;
+  }
+  .hero-img-wrap img { width: 100%; max-width: 700px; object-fit: cover; display: block; max-height: 90vh; }
+
+  /* ============================================
+     FEATURED BLOG LIST
+     — Edit: add/remove <li> items in the list below
+     ============================================ */
+  .featured-section { padding: 4rem 3rem; }
+  .featured-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted-color);
+    margin-bottom: 1.5rem;
+  }
+  .blog-list { list-style: none; border-top: 1px solid #ddd; }
+  .blog-list li {
+    border-bottom: 1px solid #ddd;
+    padding: 1.2rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .blog-list li:hover { opacity: 0.5; }
+  .blog-list-title {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--accent-color);
+    text-transform: lowercase;
+  }
+  .blog-list-arrow { font-size: 0.75rem; letter-spacing: 0.08em; color: var(--muted-color); flex-shrink: 0; margin-left: 1rem; }
+  .see-more {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 2px;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .see-more:hover { opacity: 0.5; }
+
+  /* ============================================
+     3 BIG PHOTO GRID (home page)
+     — Edit: replace src and caption text below
+     ============================================ */
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--accent-color); }
+  .photo-grid-item { overflow: hidden; aspect-ratio: 2/3; position: relative; cursor: pointer; }
+  .photo-grid-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s; }
+  .photo-grid-item:hover img { transform: scale(1.04); }
+  .photo-grid-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0);
+    transition: background .3s;
+    display: flex; align-items: flex-end; padding: 1.2rem;
+  }
+  .photo-grid-item:hover .photo-grid-overlay { background: rgba(0,0,0,0.35); }
+  .photo-grid-caption {
+    color: #fff;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .photo-grid-item:hover .photo-grid-caption { opacity: 1; }
+  .photo-grid-item:not(:last-child) { border-right: 1px solid var(--accent-color); }
+
+  /* ============================================
+     ABOUT STRIP (home page)
+     — Edit: name, bio text, and image src below
+     ============================================ */
+  .about-strip { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--accent-color); }
+  .about-strip-img { overflow: hidden; aspect-ratio: 3/4; }
+  .about-strip-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+  .about-strip-img:hover img { transform: scale(1.03); }
+  .about-strip-text { padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid var(--accent-color); }
+  .about-strip-name { font-family: var(--font-serif); font-size: 1.4rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem; }
+  .about-strip-bio { font-size: 0.85rem; line-height: 1.9; color: #444; margin-bottom: 2rem; }
+  .read-more-btn {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 2px;
+    width: fit-content;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .read-more-btn:hover { opacity: 0.5; }
+
+  /* ============================================
+     BLOG PAGE GRID
+     — Edit: add/remove .blog-card blocks below
+     ============================================ */
+  .blog-page-wrap { padding: 3rem; }
+  .blog-page-header { text-align: center; padding-bottom: 2.5rem; border-bottom: 1px solid var(--accent-color); margin-bottom: 2.5rem; }
+  .blog-page-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; }
+  .blog-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--accent-color); border-left: 1px solid var(--accent-color); }
+  .blog-card { border-right: 1px solid var(--accent-color); border-bottom: 1px solid var(--accent-color); cursor: pointer; transition: opacity .2s; }
+  .blog-card:hover { opacity: 0.75; }
+  .blog-card-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  .blog-card-body { padding: 1.1rem; }
+  .blog-card-date { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #999; margin-bottom: 0.4rem; }
+  .blog-card-title { font-family: var(--font-serif); font-style: italic; font-size: 1rem; font-weight: 400; color: var(--accent-color); line-height: 1.4; margin-bottom: 0.5rem; text-transform: lowercase; }
+  .blog-card-read { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-color); }
+
+  /* ============================================
+     ABOUT PAGE
+     — Edit: name, bio text, and image src below
+     ============================================ */
+  .about-hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh; border-bottom: 1px solid var(--accent-color); }
+  .about-hero-img { overflow: hidden; }
+  .about-hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .about-hero-content { padding: 5rem 3.5rem; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid var(--accent-color); }
+  .about-page-name { font-family: var(--font-serif); font-size: 2.5rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; margin-bottom: 2rem; }
+  .about-page-bio { font-size: 0.9rem; line-height: 2; color: #444; margin-bottom: 1rem; }
+  .about-divider { width: 32px; height: 1px; background: var(--accent-color); margin: 1.5rem 0; }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  footer { border-top: 1px solid var(--accent-color); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-name { font-family: var(--font-serif); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  .footer-copy { font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted-color); text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAV
+     Edit: "Your Name" → your real name
+     ============================================ -->
+<nav>
+  <div class="site-name" onclick="showPage('home')">Your Name</div>
+  <ul class="nav-links">
+    <li><a id="nav-home" class="active" onclick="showPage('home')">Home</a></li>
+    <li><a id="nav-blog" onclick="showPage('blog')">Blog</a></li>
+    <li><a id="nav-about" onclick="showPage('about')">About</a></li>
+  </ul>
+</nav>
+
+
+<!-- ============================================
+     HOME PAGE
+     ============================================ -->
+<div id="page-home" class="page active">
+
+  <!-- MARQUEE — Edit the text between the • dots -->
+  <div class="marquee-wrap">
+    <div class="marquee-inner">
+      living slowly • chasing light • writing it all down • living slowly • chasing light • writing it all down • living slowly • chasing light • writing it all down • living slowly • chasing light • writing it all down • living slowly • chasing light • writing it all down •&nbsp;
+    </div>
+  </div>
+
+  <!-- HERO IMAGE — Edit src="..." with your photo URL or file path -->
+  <div class="hero-img-wrap">
+    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900&q=85" alt="Portrait" />
+  </div>
+
+  <!-- FEATURED BLOG LIST — Edit titles, add/remove <li> rows -->
+  <div class="featured-section">
+    <p class="featured-label">Featured</p>
+    <ul class="blog-list">
+      <li onclick="showPage('blog')">
+        <span class="blog-list-title">my morning routine that changed everything</span>
+        <span class="blog-list-arrow">Read more →</span>
+      </li>
+      <li onclick="showPage('blog')">
+        <span class="blog-list-title">48 hours in the south of france</span>
+        <span class="blog-list-arrow">Read more →</span>
+      </li>
+      <li onclick="showPage('blog')">
+        <span class="blog-list-title">building a wardrobe you'll actually love</span>
+        <span class="blog-list-arrow">Read more →</span>
+      </li>
+      <li onclick="showPage('blog')">
+        <span class="blog-list-title">why i deleted social media for 30 days</span>
+        <span class="blog-list-arrow">Read more →</span>
+      </li>
+      <li onclick="showPage('blog')">
+        <span class="blog-list-title">to the girl i was last january</span>
+        <span class="blog-list-arrow">Read more →</span>
+      </li>
+    </ul>
+    <span class="see-more" onclick="showPage('blog')">See More Blog Posts</span>
+  </div>
+
+  <!-- 3 BIG PHOTOS — Edit src="..." and caption text for each -->
+  <div class="photo-grid">
+
+    <div class="photo-grid-item" onclick="showPage('blog')">
+      <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Blog post 1" />
+      <div class="photo-grid-overlay">
+        <span class="photo-grid-caption">my morning routine →</span>
+      </div>
+    </div>
+
+    <div class="photo-grid-item" onclick="showPage('blog')">
+      <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80" alt="Blog post 2" />
+      <div class="photo-grid-overlay">
+        <span class="photo-grid-caption">south of france →</span>
+      </div>
+    </div>
+
+    <div class="photo-grid-item" onclick="showPage('blog')">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Blog post 3" />
+      <div class="photo-grid-overlay">
+        <span class="photo-grid-caption">my wardrobe edit →</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ABOUT STRIP — Edit name, bio, and src="..." -->
+  <div class="about-strip">
+    <div class="about-strip-img">
+      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700&q=80" alt="About photo" />
+    </div>
+    <div class="about-strip-text">
+      <div class="about-strip-name">Your Name</div>
+      <p class="about-strip-bio">A personal space where I write about the small things that make life feel full — slow mornings, far-away places, what I'm wearing, and everything in between. So glad you're here.</p>
+      <span class="read-more-btn" onclick="showPage('about')">Read More</span>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-name">Your Name</span>  <!-- Edit: your name -->
+    <span class="footer-copy">© 2026 · All Rights Reserved</span>
+  </footer>
+
+</div><!-- end home -->
+
+
+<!-- ============================================
+     BLOG PAGE
+     Add more .blog-card blocks to add new posts.
+     Each card needs: image, date, title.
+     ============================================ -->
+<div id="page-blog" class="page">
+  <div class="blog-page-wrap">
+    <div class="blog-page-header">
+      <h1 class="blog-page-title">Blog</h1>
+    </div>
+    <div class="blog-cards">
+
+      <!-- BLOG CARD — copy/paste this block to add a new post -->
+      <div class="blog-card">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="" />
+        <div class="blog-card-body">
+          <p class="blog-card-date">May 20, 2026 · Wellness</p>  <!-- Edit: date & category -->
+          <p class="blog-card-title">my morning routine that changed everything</p>  <!-- Edit: title -->
+          <span class="blog-card-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="blog-card">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80" alt="" />
+        <div class="blog-card-body">
+          <p class="blog-card-date">May 12, 2026 · Travel</p>
+          <p class="blog-card-title">48 hours in the south of france</p>
+          <span class="blog-card-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="blog-card">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="" />
+        <div class="blog-card-body">
+          <p class="blog-card-date">May 5, 2026 · Style</p>
+          <p class="blog-card-title">building a wardrobe you'll actually love</p>
+          <span class="blog-card-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="blog-card">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="" />
+        <div class="blog-card-body">
+          <p class="blog-card-date">Apr 28, 2026 · Life</p>
+          <p class="blog-card-title">why i deleted social media for 30 days</p>
+          <span class="blog-card-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="blog-card">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1543340904-0e684a980078?w=600&q=80" alt="" />
+        <div class="blog-card-body">
+          <p class="blog-card-date">Apr 15, 2026 · Food</p>
+          <p class="blog-card-title">the only pasta recipe you'll ever need</p>
+          <span class="blog-card-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="blog-card">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80" alt="" />
+        <div class="blog-card-body">
+          <p class="blog-card-date">Apr 2, 2026 · Home</p>
+          <p class="blog-card-title">to the girl i was last january</p>
+          <span class="blog-card-read">Read more →</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer>
+    <span class="footer-name">Your Name</span>
+    <span class="footer-copy">© 2026 · All Rights Reserved</span>
+  </footer>
+</div><!-- end blog -->
+
+
+<!-- ============================================
+     ABOUT PAGE
+     Edit: name, bio paragraphs, and image src
+     ============================================ -->
+<div id="page-about" class="page">
+  <div class="about-hero">
+
+    <!-- Edit src="..." with your photo -->
+    <div class="about-hero-img">
+      <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=85" alt="About" />
+    </div>
+
+    <div class="about-hero-content">
+      <h1 class="about-page-name">Your Name</h1>  <!-- Edit: your name -->
+      <p class="about-page-bio">I'm a lifestyle blogger writing about the small things that make life feel full — slow mornings, far-away places, what I'm wearing, and everything in between.</p>
+      <p class="about-page-bio">This blog started as a personal journal and became something I'm really proud of. I write honestly, I shoot on film when I can, and I believe the ordinary is always worth documenting.</p>
+      <div class="about-divider"></div>
+      <p class="about-page-bio">So glad you're here.</p>
+    </div>
+
+  </div>
+  <footer>
+    <span class="footer-name">Your Name</span>
+    <span class="footer-copy">© 2026 · All Rights Reserved</span>
+  </footer>
+</div><!-- end about -->
+
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.getElementById('nav-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
